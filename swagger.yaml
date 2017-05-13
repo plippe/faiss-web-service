@@ -1,0 +1,52 @@
+swagger: '2.0'
+info:
+  title: Faiss Web Service
+  description: Search your Faiss index via http requests
+  version: 0.0.1
+produces:
+  - application/json
+paths:
+  /faiss:
+    get:
+      summary: Search your Faiss index with json body
+      description: The endpoint returns the k nearest neighbors for the given ids.
+      parameters:
+        - name: ids
+          in: query
+          description: Ids to search for
+          required: true
+          type: array
+          items:
+            type: number
+            format: integer
+        - name: k
+          in: query
+          description: Amount of neighbors to return
+          required: true
+          type: number
+          format: integer
+      responses:
+        '200':
+          description: Nearest neighbors found, with their score, for the given ids
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Result'
+definitions:
+  Result:
+    properties:
+      id:
+        type: number
+        format: integer
+      neighbors:
+        type: array
+        items:
+          $ref: '#/definitions/Neightbor'
+  Neightbor:
+    properties:
+      id:
+        type: number
+        format: integer
+      score:
+        type: number
+        format: float
