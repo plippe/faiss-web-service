@@ -13,4 +13,4 @@ RUN pip install --upgrade pip && \
 
 COPY . /opt/faiss-web-service
 
-ENTRYPOINT python /opt/faiss-web-service/faiss_web_service/app.py
+ENTRYPOINT /opt/faiss-web-service/bin/faiss_web_service.sh
