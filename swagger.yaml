@@ -8,7 +8,7 @@ produces:
 paths:
   /faiss:
     get:
-      summary: Search your Faiss index with json body
+      summary: Search your Faiss index
       description: The endpoint returns the k nearest neighbors for the given ids.
       parameters:
         - name: ids
