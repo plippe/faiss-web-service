@@ -1,7 +1,12 @@
 DEBUG = True
 
-def FAISS_INDEX():
+def GET_FAISS_RESOURCES():
+    return None
+
+def GET_FAISS_INDEX():
     raise NotImplementedError
 
-def FAISS_IDS_VECTORS():
+def GET_FAISS_IDS_VECTORS():
     raise NotImplementedError
+
+UPDATE_FAISS_AFTER_SECONDS = None
