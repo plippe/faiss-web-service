@@ -7,10 +7,10 @@ The fastest way to get started is to run the following commands:
 docker build -t faiss:d3c8456 github.com/facebookresearch/faiss#d3c8456
 
 # Create a docker image for the faiss web service
-docker build -t faiss-web-service:7ad970c github.com/Plippe/faiss-web-service#7ad970c
+docker build -t faiss-web-service:cada305 github.com/Plippe/faiss-web-service#cada305
 
 # Run a docker container
-docker run --rm --detach --publish 5000:5000 faiss-web-service:7ad970c
+docker run --rm --detach --publish 5000:5000 faiss-web-service:cada305
 ```
 
 Once the container is running, you should be able to ping the service:
@@ -34,7 +34,7 @@ docker run \
     --publish 5000:5000 \
     --volume [PATH_TO_YOUR_CONFIG]:/tmp/your_config.py \
     --env FAISS_WEB_SERVICE_CONFIG=/tmp/your_config.py \
-    faiss-web-service:7ad970c
+    faiss-web-service:cada305
 ```
 
 Examples of how to write a config file can be found in the
@@ -42,6 +42,6 @@ Examples of how to write a config file can be found in the
 folder.
 
 Another solution would be to create a new docker image
-[from `faiss-web-service:7ad970c`](https://docs.docker.com/engine/reference/builder/#from),
+[from `faiss-web-service:cada305`](https://docs.docker.com/engine/reference/builder/#from),
 that [sets the environement variable](https://docs.docker.com/engine/reference/builder/#env),
 and [adds your config file](https://docs.docker.com/engine/reference/builder/#add).
