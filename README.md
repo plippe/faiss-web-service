@@ -40,3 +40,17 @@ Another solution would be to create a new docker image
 [from `plippe/faiss-web-service`](https://docs.docker.com/engine/reference/builder/#from),
 that [sets the environement variable](https://docs.docker.com/engine/reference/builder/#env),
 and [adds your config file](https://docs.docker.com/engine/reference/builder/#add).
+
+
+### Production
+`docker run` will run the application with Flask's build in server. Flask's documentation clearly
+states [it is not suitable for production](http://flask.pocoo.org/docs/0.12/deploying/). To run the application
+with `uWSGI` you must add `production` to the `run` command, i.e:
+
+```sh
+# Flask's build in server
+docker run --rm --detach --publish 5000:5000 plippe/faiss-web-service
+
+# uWSGI server
+docker run --rm --detach --publish 5000:5000 plippe/faiss-web-service production
+```
