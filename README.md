@@ -1,9 +1,7 @@
 # Faiss Web Service
 
 ### Getting started
-The fastest way to get started is to use
-[the docker hub image](https://hub.docker.com/r/plippe/faiss-web-service/) with the following
-command:
+The fastest way to get started is to use [the docker hub image](https://hub.docker.com/r/plippe/faiss-web-service/) with the following command:
 ```sh
 docker run --rm --detach --publish 5000:5000 plippe/faiss-web-service
 ```
@@ -18,9 +16,7 @@ curl "localhost:5000/faiss?k=5&ids=1&ids=2&ids=3"
 ```
 
 ### Custom config
-By default, the faiss web service will load a local file for the faiss index, and for the ids to
-vectors mapping. This behavior can be overwritten by writting your own configuration file, and
-having its path as an environment variable `FAISS_WEB_SERVICE_CONFIG`.
+By default, the faiss web service will load a local file for the faiss index, and for the ids to vectors mapping. This behavior can be overwritten by writting your own configuration file, and having its path as an environment variable `FAISS_WEB_SERVICE_CONFIG`.
 
 ```sh
 docker run \
@@ -32,20 +28,13 @@ docker run \
     plippe/faiss-web-service
 ```
 
-Examples of how to write a config file can be found in the
-[faiss_web_service_config](https://github.com/Plippe/faiss-web-service/tree/master/faiss_web_service_config)
-folder.
+Examples of how to write a config file can be found in the [faiss_web_service_config](https://github.com/Plippe/faiss-web-service/tree/master/faiss_web_service_config) folder.
 
-Another solution would be to create a new docker image
-[from `plippe/faiss-web-service`](https://docs.docker.com/engine/reference/builder/#from),
-that [sets the environement variable](https://docs.docker.com/engine/reference/builder/#env),
-and [adds your config file](https://docs.docker.com/engine/reference/builder/#add).
+Another solution would be to create a new docker image [from `plippe/faiss-web-service`](https://docs.docker.com/engine/reference/builder/#from), that [sets the environement variable](https://docs.docker.com/engine/reference/builder/#env), and [adds your config file](https://docs.docker.com/engine/reference/builder/#add).
 
 
 ### Production
-`docker run` will run the application with Flask's build in server. Flask's documentation clearly
-states [it is not suitable for production](http://flask.pocoo.org/docs/0.12/deploying/). To run the application
-with `uWSGI` you must add `production` to the `run` command, i.e:
+`docker run` will run the application with Flask's build in server. Flask's documentation clearly states [it is not suitable for production](http://flask.pocoo.org/docs/0.12/deploying/). To run the application with `uWSGI` you must add `production` to the `run` command, i.e:
 
 ```sh
 # Flask's build in server
