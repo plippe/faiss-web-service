@@ -3,7 +3,7 @@ from faiss_index import FaissIndex
 
 blueprint = Blueprint('faiss_index', __name__)
 
-@blueprint.record
+@blueprint.record_once
 def record(setup_state):
     manage_faiss_index(
         setup_state.app.config.get('GET_FAISS_RESOURCES'),
