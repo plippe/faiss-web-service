@@ -39,4 +39,4 @@ sandbox: build
 		--interactive \
 		--volume ${PWD}:/opt/faiss-web-service \
 		--entrypoint bash \
-		plippe/faiss-web-service
+		plippe/faiss-web-service:${COMMIT}
