@@ -39,12 +39,12 @@ def search():
         return jsonify(results_ids + results_vectors)
 
     except (BadRequest, ValidationError) as e:
-        print("Bad Request", e)
-        return "Bad Request", 400
+        print('Bad request', e)
+        return 'Bad request', 400
 
     except Exception as e:
-        print("Server error", e)
-        return "Server error", 500
+        print('Server error', e)
+        return 'Server error', 500
 
 def manage_faiss_index(get_faiss_resources, get_faiss_index, get_faiss_ids_vectors, update_after_seconds):
 
