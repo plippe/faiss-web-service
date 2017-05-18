@@ -3,6 +3,12 @@ from flask import Blueprint, jsonify, request
 from werkzeug.exceptions import BadRequest
 from faiss_index import FaissIndex
 
+try:
+    import uwsgi
+except ImportError:
+    print('Failed to load python module uwsgi')
+    print('Periodic faiss index updates isn\'t enabled')
+
 blueprint = Blueprint('faiss_index', __name__)
 
 @blueprint.record_once
@@ -48,21 +54,29 @@ def search():
 
 def manage_faiss_index(get_faiss_resources, get_faiss_index, get_faiss_ids_vectors, update_after_seconds):
 
-    SIGNAL_SET_FAISS_INDEX = 1001
-    SIGNAL_SET_FAISS_RESOURCES = 1002
+    SIGNAL_SET_FAISS_RESOURCES = 1001
+    SIGNAL_SET_FAISS_INDEX = 2001
 
-    def set_faiss_index(*args):
+    def set_faiss_resources(signal):
+        print('Getting Faiss rerouces')
+        get_faiss_resources()
+
+        if uwsgi:
+            uwsgi.signal(SIGNAL_SET_FAISS_INDEX)
+
+    def set_faiss_index(signal = None):
+        print('Getting Faiss index')
         blueprint.faiss_index = FaissIndex(get_faiss_index(), get_faiss_ids_vectors())
 
-    def set_faiss_resources(*args):
-        get_faiss_resources()
-        uwsgi.signal(SIGNAL_SET_FAISS_INDEX)
+        if uwsgi and signal:
+            uwsgi.signal(signal + 1)
 
     def set_periodically():
-        try:
-            import uwsgi
-
-            uwsgi.register_signal(SIGNAL_SET_FAISS_INDEX, 'workers', set_faiss_index)
+        if isinstance(update_after_seconds, int):
+            for i in range(0, uwsgi.numproc):
+                signal = SIGNAL_SET_FAISS_INDEX + i
+                worker = 'worker{}'.format(1 + i)
+                uwsgi.register_signal(signal, worker, update_index)
 
             if get_faiss_resources:
                 uwsgi.register_signal(SIGNAL_SET_FAISS_RESOURCES, 'worker', set_faiss_resources)
@@ -70,14 +84,11 @@ def manage_faiss_index(get_faiss_resources, get_faiss_index, get_faiss_ids_vecto
             else:
                 uwsgi.add_timer(SIGNAL_SET_FAISS_INDEX, update_after_seconds)
 
-        except ImportError:
-            print('Failed to load python module uwsgi')
-            print('Periodic faiss index updates isn\'t enabled')
-        except Exception:
+        else:
             print('Failed to set periodic faiss index updates')
             print('UPDATE_FAISS_AFTER_SECONDS must be an integer')
 
-    if update_after_seconds:
+    if uwsgi and update_after_seconds:
         set_periodically()
 
     if get_faiss_resources:
