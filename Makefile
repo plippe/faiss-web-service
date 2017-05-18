@@ -1,4 +1,4 @@
-.PHONY: build run
+.PHONY: build run push sandbox
 
 FAISS_COMMIT := d3c8456
 COMMIT := $(shell git describe --dirty --always)
