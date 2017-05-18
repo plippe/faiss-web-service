@@ -3,50 +3,85 @@ info:
   title: Faiss Web Service
   description: Search your Faiss index via http requests
   version: 0.0.1
+
+consumes:
+  - application/json
+
 produces:
   - application/json
+  - text/html
+
 paths:
-  /faiss:
-    get:
+  /faiss/search:
+    post:
       summary: Search your Faiss index
-      description: The endpoint returns the k nearest neighbors for the given ids.
+      description: The endpoint returns the k nearest neighbors for the given ids, and / or vectors.
       parameters:
-        - name: ids
-          in: query
-          description: Ids to search for
+        - name: body
+          in: body
           required: true
-          type: array
-          items:
-            type: number
-            format: integer
-        - name: k
-          in: query
-          description: Amount of neighbors to return
-          required: true
-          type: number
-          format: integer
+          schema:
+            $ref: '#/definitions/FaissSearchRequest'
       responses:
         '200':
-          description: Nearest neighbors found, with their score, for the given ids
+          description: Nearest neighbors found, with their score
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/Result'
+            $ref: '#/definitions/FaissSearchResponse'
+        '400':
+          description: Bad request
+        '500':
+          description: Server error
+
 definitions:
-  Result:
+  FaissSearchRequest:
+    type: object
+    required: ['k'] # ids or vectors
     properties:
-      id:
+      k:
+        description: Amount of neighbors to return
         type: number
         format: integer
-      neighbors:
+      ids:
+        description: Ids to search for
         type: array
         items:
-          $ref: '#/definitions/Neightbor'
+          $ref: '#/definitions/Id'
+      vectors:
+        description: Vectors to search for
+        type: array
+        items:
+          $ref: '#/definitions/Vector'
+
+  FaissSearchResponse:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          $ref: '#/definitions/Id'
+        vector:
+          $ref: '#/definitions/Vector'
+        neighbors:
+          type: array
+          items:
+            $ref: '#/definitions/Neightbor'
+
+  Id:
+    type: number
+    format: integer
+
+  Vector:
+    type: array
+    items:
+      type: array
+      items:
+        type: number
+
   Neightbor:
+    type: object
     properties:
       id:
-        type: number
-        format: integer
+        $ref: '#/definitions/Id'
       score:
         type: number
         format: float
