@@ -35,7 +35,7 @@ class FaissIndex(object):
         vectors = [np.array(vector, dtype=np.float32) for vector in vectors]
         vectors = np.atleast_2d(vectors)
 
-        scores, neighbors = self.index.search(vectors, k + 1)
+        scores, neighbors = self.index.search(vectors, k + 1) if vectors.size > 0 else ([], [])
         for id_, vector, neighbors, scores in zip(ids, vectors, neighbors, scores):
             neighbors_scores = [neighbor_dict(n, s) for n, s in zip(neighbors, scores)]
             neighbors_scores_without_self = [ns for ns in neighbors_scores if ns['id'] != id_]
