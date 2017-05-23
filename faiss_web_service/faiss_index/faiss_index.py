@@ -37,8 +37,10 @@ class FaissIndex(object):
 
         scores, neighbors = self.index.search(vectors, k) if vectors.size > 0 else ([], [])
         for id_, vector, neighbors, scores in zip(ids, vectors, neighbors, scores):
-            neighbors_scores = [neighbor_dict(n, s) for n, s in zip(neighbors, scores)]
-            neighbors_scores_without_self = [ns for ns in neighbors_scores if ns['id'] != id_]
-            results.append(result_dict(id_, vector, neighbors_scores_without_self))
+            neighbors_scores = zip(neighbors, scores)
+            neighbors_scores = [(n, s) for n, s in neighbors_scores if n != id_ and n != -1]
+            neighbors_scores = [neighbor_dict(n, s) for n, s in neighbors_scores]
+
+            results.append(result_dict(id_, vector, neighbors_scores))
 
         return results
