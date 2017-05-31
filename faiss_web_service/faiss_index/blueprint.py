@@ -9,6 +9,8 @@ except ImportError:
     print('Failed to load python module uwsgi')
     print('Periodic faiss index updates isn\'t enabled')
 
+    uwsgi = None
+
 blueprint = Blueprint('faiss_index', __name__)
 
 @blueprint.record_once
