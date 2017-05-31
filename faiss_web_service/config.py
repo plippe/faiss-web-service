@@ -6,7 +6,7 @@ def GET_FAISS_RESOURCES():
 def GET_FAISS_INDEX():
     raise NotImplementedError
 
-def GET_FAISS_IDS_VECTORS():
+def GET_FAISS_ID_TO_VECTOR():
     raise NotImplementedError
 
 UPDATE_FAISS_AFTER_SECONDS = None

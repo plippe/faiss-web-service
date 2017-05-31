@@ -3,16 +3,15 @@ import numpy as np
 
 class FaissIndex(object):
 
-    def __init__(self, index, ids_vectors):
+    def __init__(self, index, id_to_vector):
         assert index
-        assert ids_vectors
+        assert id_to_vector
 
         self.index = index
-        self.ids_vectors = ids_vectors
+        self.id_to_vector = id_to_vector
 
     def search_by_ids(self, ids, k):
-        ids = [id_ for id_ in ids if id_ in self.ids_vectors]
-        vectors = [self.ids_vectors[id_] for id_ in ids]
+        vectors = [self.id_to_vector(id_) for id_ in ids]
         results = self.__search__(ids, vectors, k + 1)
 
         return results

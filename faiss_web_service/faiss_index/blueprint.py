@@ -18,7 +18,7 @@ def record(setup_state):
     manage_faiss_index(
         setup_state.app.config.get('GET_FAISS_RESOURCES'),
         setup_state.app.config['GET_FAISS_INDEX'],
-        setup_state.app.config['GET_FAISS_IDS_VECTORS'],
+        setup_state.app.config['GET_FAISS_ID_TO_VECTOR'],
         setup_state.app.config.get('UPDATE_FAISS_AFTER_SECONDS'))
 
 @blueprint.route('/faiss/search', methods=['POST'])
@@ -54,7 +54,7 @@ def search():
         print('Server error', e)
         return 'Server error', 500
 
-def manage_faiss_index(get_faiss_resources, get_faiss_index, get_faiss_ids_vectors, update_after_seconds):
+def manage_faiss_index(get_faiss_resources, get_faiss_index, get_faiss_id_to_vector, update_after_seconds):
 
     SIGNAL_SET_FAISS_RESOURCES = 1001
     SIGNAL_SET_FAISS_INDEX = 2001
@@ -68,7 +68,7 @@ def manage_faiss_index(get_faiss_resources, get_faiss_index, get_faiss_ids_vecto
 
     def set_faiss_index(signal = None):
         print('Getting Faiss index')
-        blueprint.faiss_index = FaissIndex(get_faiss_index(), get_faiss_ids_vectors())
+        blueprint.faiss_index = FaissIndex(get_faiss_index(), get_faiss_id_to_vector())
 
         if uwsgi and signal:
             uwsgi.signal(signal + 1)
