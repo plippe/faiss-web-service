@@ -56,29 +56,24 @@ def search():
 
 def manage_faiss_index(get_faiss_resources, get_faiss_index, get_faiss_id_to_vector, update_after_seconds):
 
-    SIGNAL_SET_FAISS_RESOURCES = 1001
-    SIGNAL_SET_FAISS_INDEX = 2001
+    SIGNAL_SET_FAISS_RESOURCES = 1
+    SIGNAL_SET_FAISS_INDEX = 2
 
-    def set_faiss_resources(signal):
-        print('Getting Faiss rerouces')
+    def set_faiss_resources(signal = None):
+        print('Getting Faiss resources')
         get_faiss_resources()
 
-        if uwsgi:
+        if uwsgi and signal:
             uwsgi.signal(SIGNAL_SET_FAISS_INDEX)
 
     def set_faiss_index(signal = None):
         print('Getting Faiss index')
         blueprint.faiss_index = FaissIndex(get_faiss_index(), get_faiss_id_to_vector())
 
-        if uwsgi and signal:
-            uwsgi.signal(signal + 1)
-
     def set_periodically():
         if isinstance(update_after_seconds, int):
-            for i in range(0, uwsgi.numproc):
-                signal = SIGNAL_SET_FAISS_INDEX + i
-                worker = 'worker{}'.format(1 + i)
-                uwsgi.register_signal(signal, worker, update_index)
+
+            uwsgi.register_signal(SIGNAL_SET_FAISS_INDEX, 'workers', set_faiss_index)
 
             if get_faiss_resources:
                 uwsgi.register_signal(SIGNAL_SET_FAISS_RESOURCES, 'worker', set_faiss_resources)
@@ -94,6 +89,6 @@ def manage_faiss_index(get_faiss_resources, get_faiss_index, get_faiss_id_to_vec
         set_periodically()
 
     if get_faiss_resources:
-        get_faiss_resources()
+        set_faiss_resources()
 
     set_faiss_index()
