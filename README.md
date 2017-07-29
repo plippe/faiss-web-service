@@ -24,7 +24,8 @@ By default, the faiss web service will load a local file for the faiss index, an
 ```sh
 docker run \
     --rm \
-    --detach \
+    --tty \
+    --interactive \
     --publish 5000:5000 \
     --volume [PATH_TO_YOUR_CONFIG]:/tmp/your_config.py \
     --env FAISS_WEB_SERVICE_CONFIG=/tmp/your_config.py \
