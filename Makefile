@@ -8,7 +8,7 @@ build:
 	docker build \
 		--tag $(DOCKER_IMAGE) \
 		--tag $(DOCKER_IMAGE):cpu \
-		--tag $(DOCKER_IMAGE):cpu-$(DOCKER_TAG) \
+		--tag $(DOCKER_IMAGE):cpu-$(DOCKER_TAG) .
 
 	docker build \
 		--build-arg IMAGE=nvidia/cuda:8.0-runtime-ubuntu16.04 \
@@ -24,7 +24,7 @@ run-%:
 		--interactive \
 		--publish 5000:5000 \
 		--volume $(PWD):/opt/faiss-web-service \
-		$(DOCKER_IMAGE):$(DOCKER_TAG) $*
+		$(DOCKER_IMAGE):cpu-$(DOCKER_TAG) $*
 
 publish:
 ifneq ($(findstring dirty,$(DOCKER_TAG)),)
