@@ -1,4 +1,4 @@
-.PHONY: build run test publish
+.PHONY: build run test release
 .DEFAULT_GOAL := build
 
 DOCKER_IMAGE := plippe/faiss-web-service
@@ -35,9 +35,9 @@ test:
 		--entrypoint bash \
 		$(DOCKER_IMAGE):cpu-$(DOCKER_TAG) -c "python -m unittest discover"
 
-publish:
+release:
 ifneq ($(findstring dirty,$(DOCKER_TAG)),)
-	$(error Publish cancelled, repository dirty)
+	$(error Release cancelled, repository dirty)
 endif
 
 	docker push $(DOCKER_IMAGE)
