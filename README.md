@@ -19,7 +19,7 @@ curl 'localhost:5000/faiss/search' -X POST -d '{"k": 5, "vectors": [[54.7, 0.3, 
 ```
 
 ### Custom config
-By default, the faiss web service will load a local file for the faiss index, and for the ids to vectors mapping. This behavior can be overwritten by writting your own configuration file, and having its path as an environment variable `FAISS_WEB_SERVICE_CONFIG`.
+By default, the faiss web service will download files for the faiss index, and for the ids to vectors mapping. This behavior can be overwritten by writting your own configuration file, and having its path as an environment variable `FAISS_WEB_SERVICE_CONFIG`.
 
 ```sh
 docker run \
@@ -32,7 +32,7 @@ docker run \
     plippe/faiss-web-service
 ```
 
-Examples of how to write a config file can be found in the [faiss_web_service_config](https://github.com/Plippe/faiss-web-service/tree/master/faiss_web_service_config) folder.
+Examples of how to write a config file can be found in the [resources](https://github.com/Plippe/faiss-web-service/tree/master/resources) folder.
 
 Another solution would be to create a new docker image [from `plippe/faiss-web-service`](https://docs.docker.com/engine/reference/builder/#from), that [sets the environement variable](https://docs.docker.com/engine/reference/builder/#env), and [adds your config file](https://docs.docker.com/engine/reference/builder/#add).
 

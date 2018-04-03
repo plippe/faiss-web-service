@@ -2,10 +2,10 @@
 
 ROOT=$(realpath $(dirname ${0})/..)
 
-export FAISS_WEB_SERVICE_CONFIG=${FAISS_WEB_SERVICE_CONFIG:-${ROOT}/faiss_web_service_config/faiss_index_local_file.py}
+export FAISS_WEB_SERVICE_CONFIG=${FAISS_WEB_SERVICE_CONFIG:-${ROOT}/resources/faiss_index_urllib.py}
 
 development () {
-  python ${ROOT}/faiss_web_service/app.py
+  python ${ROOT}/src/app.py
 }
 
 production () {
@@ -13,7 +13,7 @@ production () {
 
     uwsgi \
         --http :5000 \
-        --chdir ${ROOT}/faiss_web_service \
+        --chdir ${ROOT}/src \
         --module app:app \
         --master \
         --processes 4 \
