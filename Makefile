@@ -1,4 +1,4 @@
-.PHONY: build run publish
+.PHONY: build run test publish
 .DEFAULT_GOAL := build
 
 DOCKER_IMAGE := plippe/faiss-web-service
@@ -22,9 +22,18 @@ run-%:
 		--rm \
 		--tty \
 		--interactive \
-		--publish 5000:5000 \
 		--volume $(PWD):/opt/faiss-web-service \
+		--publish 5000:5000 \
 		$(DOCKER_IMAGE):cpu-$(DOCKER_TAG) $*
+
+test:
+	docker run \
+		--rm \
+		--tty \
+		--interactive \
+		--volume $(PWD):/opt/faiss-web-service \
+		--entrypoint bash \
+		$(DOCKER_IMAGE):cpu-$(DOCKER_TAG) -c "python -m unittest discover"
 
 publish:
 ifneq ($(findstring dirty,$(DOCKER_TAG)),)
