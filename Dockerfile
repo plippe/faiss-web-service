@@ -17,6 +17,7 @@ RUN apt-get update && \
 
 ENV PATH="/opt/conda/bin:${PATH}"
 
-COPY . /opt/faiss-web-service
+COPY src /opt/faiss-web-service/src
+COPY resources /opt/faiss-web-service/resources
 
 ENTRYPOINT ["/opt/faiss-web-service/bin/faiss_web_service.sh"]
