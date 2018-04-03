@@ -20,4 +20,6 @@ ENV PATH="/opt/conda/bin:${PATH}"
 COPY src /opt/faiss-web-service/src
 COPY resources /opt/faiss-web-service/resources
 
+WORKDIR /opt/faiss-web-service
+
 ENTRYPOINT ["/opt/faiss-web-service/bin/faiss_web_service.sh"]
