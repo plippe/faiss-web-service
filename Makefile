@@ -6,15 +6,13 @@ DOCKER_TAG := $(shell git describe --dirty --always)
 
 build:
 	docker build \
+		--build-arg IMAGE=plippe/faiss-docker:1.2.1-cpu \
 		--tag $(DOCKER_IMAGE) \
-		--tag $(DOCKER_IMAGE):cpu \
-		--tag $(DOCKER_IMAGE):cpu-$(DOCKER_TAG) .
+		--tag $(DOCKER_IMAGE):$(DOCKER_TAG)-cpu .
 
 	docker build \
-		--build-arg IMAGE=nvidia/cuda:8.0-runtime-ubuntu16.04 \
-		--build-arg VERSION=gpu \
-		--tag $(DOCKER_IMAGE):gpu \
-		--tag $(DOCKER_IMAGE):gpu-$(DOCKER_TAG) .
+		--build-arg IMAGE=plippe/faiss-docker:1.2.1-gpu \
+		--tag $(DOCKER_IMAGE):$(DOCKER_TAG)-gpu .
 
 run: run-development
 run-%:
