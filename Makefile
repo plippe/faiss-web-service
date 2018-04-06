@@ -22,7 +22,7 @@ run-%:
 		--interactive \
 		--volume $(PWD):/opt/faiss-web-service \
 		--publish 5000:5000 \
-		$(DOCKER_IMAGE):cpu-$(DOCKER_TAG) $*
+		$(DOCKER_IMAGE):$(DOCKER_TAG)-cpu $*
 
 test:
 	docker run \
@@ -31,7 +31,7 @@ test:
 		--interactive \
 		--volume $(PWD):/opt/faiss-web-service \
 		--entrypoint bash \
-		$(DOCKER_IMAGE):cpu-$(DOCKER_TAG) -c "python -m unittest discover"
+		$(DOCKER_IMAGE):$(DOCKER_TAG)-cpu -c "python -m unittest discover"
 
 release:
 ifneq ($(findstring dirty,$(DOCKER_TAG)),)
@@ -39,8 +39,5 @@ ifneq ($(findstring dirty,$(DOCKER_TAG)),)
 endif
 
 	docker push $(DOCKER_IMAGE)
-	docker push $(DOCKER_IMAGE):cpu
-	docker push $(DOCKER_IMAGE):cpu-$(DOCKER_TAG)
-
-	docker push $(DOCKER_IMAGE):gpu
-	docker push $(DOCKER_IMAGE):gpu-$(DOCKER_TAG)
+	docker push $(DOCKER_IMAGE):$(DOCKER_TAG)-cpu
+	docker push $(DOCKER_IMAGE):$(DOCKER_TAG)-gpu
