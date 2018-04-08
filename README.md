@@ -5,7 +5,8 @@
 ### Getting started
 The fastest way to get started is to use [the docker hub image](https://hub.docker.com/r/plippe/faiss-web-service/) with the following command:
 ```sh
-docker run --rm --detach --publish 5000:5000 plippe/faiss-web-service
+FAISS_VERSION=...
+docker run --rm --detach --publish 5000:5000 plippe/faiss-web-service:${FAISS_VERSION}-cpu
 ```
 
 Once the container is running, you should be able to ping the service:
@@ -31,7 +32,7 @@ docker run \
     --publish 5000:5000 \
     --volume [PATH_TO_YOUR_CONFIG]:/tmp/your_config.py \
     --env FAISS_WEB_SERVICE_CONFIG=/tmp/your_config.py \
-    plippe/faiss-web-service
+    plippe/faiss-web-service:${FAISS_VERSION}-cpu
 ```
 
 Examples of how to write a config file can be found in the [resources](https://github.com/Plippe/faiss-web-service/tree/master/resources) folder.
@@ -44,8 +45,8 @@ Another solution would be to create a new docker image [from `plippe/faiss-web-s
 
 ```sh
 # Flask's build in server
-docker run --rm --detach --publish 5000:5000 plippe/faiss-web-service
+docker run --rm --detach --publish 5000:5000 plippe/faiss-web-service:${FAISS_VERSION}-cpu
 
 # uWSGI server
-docker run --rm --detach --publish 5000:5000 plippe/faiss-web-service production
+docker run --rm --detach --publish 5000:5000 plippe/faiss-web-service:${FAISS_VERSION}-cpu production
 ```
