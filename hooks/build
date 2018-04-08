@@ -1,3 +1,6 @@
 #!/bin/bash
 
+apt-get update
+apt-get install -y jq
+
 make build
