@@ -1,22 +1,17 @@
 .PHONY: build run test release
 .DEFAULT_GOAL := build
 
-FAISS_VERSION := $(shell curl -s https://api.github.com/repos/facebookresearch/faiss/releases/latest | jq -r .tag_name | cut -c2-)
-VERSION := $(shell git describe --dirty --always)
-
 DOCKER_IMAGE := plippe/faiss-web-service
-DOCKER_TAG := $(shell git describe --dirty --always)
+FAISS_VERSION := $(shell curl -s https://api.github.com/repos/facebookresearch/faiss/releases/latest | jq -r .tag_name | cut -c2-)
 
 build:
 	docker build \
 		--build-arg IMAGE=plippe/faiss-docker:1.2.1-cpu \
-		--tag $(DOCKER_IMAGE):$(FAISS_VERSION)-cpu \
-		--tag $(DOCKER_IMAGE):$(FAISS_VERSION)-cpu-$(VERSION) .
+		--tag $(DOCKER_IMAGE):$(FAISS_VERSION)-cpu .
 
 	docker build \
 		--build-arg IMAGE=plippe/faiss-docker:1.2.1-gpu \
-		--tag $(DOCKER_IMAGE):$(FAISS_VERSION)-gpu \
-		--tag $(DOCKER_IMAGE):$(FAISS_VERSION)-gpu-$(VERSION) .
+		--tag $(DOCKER_IMAGE):$(FAISS_VERSION)-gpu .
 
 run: run-development
 run-%:
@@ -39,6 +34,4 @@ test:
 
 release:
 	docker push $(DOCKER_IMAGE):$(FAISS_VERSION)-cpu
-	docker push $(DOCKER_IMAGE):$(FAISS_VERSION)-cpu-$(VERSION)
 	docker push $(DOCKER_IMAGE):$(FAISS_VERSION)-gpu
-	docker push $(DOCKER_IMAGE):$(FAISS_VERSION)-gpu-$(VERSION)
