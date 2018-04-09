@@ -38,10 +38,6 @@ test:
 		$(DOCKER_IMAGE):$(FAISS_VERSION)-cpu -c "python -m unittest discover"
 
 release:
-ifneq ($(findstring dirty,$(DOCKER_TAG)),)
-	$(error Release cancelled, repository dirty)
-endif
-
 	docker push $(DOCKER_IMAGE):$(FAISS_VERSION)-cpu
 	docker push $(DOCKER_IMAGE):$(FAISS_VERSION)-cpu-$(VERSION)
 	docker push $(DOCKER_IMAGE):$(FAISS_VERSION)-gpu
