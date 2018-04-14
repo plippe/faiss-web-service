@@ -7,7 +7,8 @@ FAISS_VERSION := $(shell curl -s https://api.github.com/repos/facebookresearch/f
 build:
 	docker build \
 		--build-arg IMAGE=plippe/faiss-docker:1.2.1-cpu \
-		--tag $(DOCKER_IMAGE):$(FAISS_VERSION)-cpu .
+		--tag $(DOCKER_IMAGE):$(FAISS_VERSION)-cpu \
+		--tag $(DOCKER_IMAGE):latest .
 
 	docker build \
 		--build-arg IMAGE=plippe/faiss-docker:1.2.1-gpu \
@@ -21,7 +22,7 @@ run-%:
 		--interactive \
 		--volume $(PWD):/opt/faiss-web-service \
 		--publish 5000:5000 \
-		$(DOCKER_IMAGE):$(FAISS_VERSION)-cpu $*
+		$(DOCKER_IMAGE) $*
 
 test:
 	docker run \
@@ -30,8 +31,9 @@ test:
 		--interactive \
 		--volume $(PWD):/opt/faiss-web-service \
 		--entrypoint bash \
-		$(DOCKER_IMAGE):$(FAISS_VERSION)-cpu -c "python -m unittest discover"
+		$(DOCKER_IMAGE) -c "python -m unittest discover"
 
 release:
+	docker push $(DOCKER_IMAGE)
 	docker push $(DOCKER_IMAGE):$(FAISS_VERSION)-cpu
 	docker push $(DOCKER_IMAGE):$(FAISS_VERSION)-gpu
