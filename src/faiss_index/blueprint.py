@@ -13,6 +13,7 @@ except ImportError:
 
 blueprint = Blueprint('faiss_index', __name__)
 
+
 @blueprint.record_once
 def record(setup_state):
     manage_faiss_index(
@@ -20,6 +21,7 @@ def record(setup_state):
         setup_state.app.config['GET_FAISS_INDEX'],
         setup_state.app.config['GET_FAISS_ID_TO_VECTOR'],
         setup_state.app.config.get('UPDATE_FAISS_AFTER_SECONDS'))
+
 
 @blueprint.route('/faiss/search', methods=['POST'])
 def search():
@@ -29,22 +31,22 @@ def search():
             'type': 'object',
             'required': ['k'],
             'properties': {
-                'k': { 'type': 'integer', 'minimum': 1 },
-                'ids': { 'type': 'array', 'items': { 'type': 'number' }},
+                'k': {'type': 'integer', 'minimum': 1},
+                'ids': {'type': 'array', 'items': {'type': 'number'}},
+                'image': {'type': 'string'},
                 'vectors': {
-                    'type': 'array',
-                    'items': {
-                        'type': 'array',
-                        'items': { 'type': 'number' }
-                    }
+                    'type': 'string'
                 }
             }
         })
 
         results_ids = blueprint.faiss_index.search_by_ids(json['ids'], json['k']) if 'ids' in json else []
-        results_vectors = blueprint.faiss_index.search_by_vectors(json['vectors'], json['k']) if 'vectors' in json else []
+        results_vectors = blueprint.faiss_index.search_by_vectors(json['vectors'],
+                                                                  json['k']) if 'vectors' in json else []
+        results_image = blueprint.faiss_index.search_by_image(json['image'],
+                                                              json['k']) if 'image' in json else []
 
-        return jsonify(results_ids + results_vectors)
+        return jsonify(results_ids + results_vectors + results_image)
 
     except (BadRequest, ValidationError) as e:
         print('Bad request', e)
@@ -54,21 +56,23 @@ def search():
         print('Server error', e)
         return 'Server error', 500
 
-def manage_faiss_index(get_faiss_resources, get_faiss_index, get_faiss_id_to_vector, update_after_seconds):
 
+def manage_faiss_index(get_faiss_resources, get_faiss_index, get_faiss_id_to_vector, update_after_seconds):
     SIGNAL_SET_FAISS_RESOURCES = 1
     SIGNAL_SET_FAISS_INDEX = 2
 
-    def set_faiss_resources(signal = None):
+    def set_faiss_resources(signal=None):
         print('Getting Faiss resources')
         get_faiss_resources()
 
         if uwsgi and signal:
             uwsgi.signal(SIGNAL_SET_FAISS_INDEX)
 
-    def set_faiss_index(signal = None):
+    def set_faiss_index(signal=None):
         print('Getting Faiss index')
-        blueprint.faiss_index = FaissIndex(get_faiss_index(), get_faiss_id_to_vector())
+        index = get_faiss_index()
+        id_to_vector = get_faiss_id_to_vector()
+        blueprint.faiss_index = FaissIndex(index, id_to_vector)
 
     def set_periodically():
         if isinstance(update_after_seconds, int):

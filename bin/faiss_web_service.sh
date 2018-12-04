@@ -2,7 +2,7 @@
 
 ROOT=$(realpath $(dirname ${0})/..)
 
-export FAISS_WEB_SERVICE_CONFIG=${FAISS_WEB_SERVICE_CONFIG:-${ROOT}/resources/faiss_index_urllib.py}
+export FAISS_WEB_SERVICE_CONFIG=${FAISS_WEB_SERVICE_CONFIG:-${ROOT}/src/utils/faiss_index_local_file.py}
 
 development () {
   python ${ROOT}/src/app.py
