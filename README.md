@@ -19,6 +19,17 @@ docker pull plippe/faiss-web-service:1.2.1-gpu
 
 ## API 使用规则
 
+### 构建索引
+
+启动docker 容器，进入容器中，运行：
+
+```bash
+cd src/train_index
+python train_index.py
+```
+
+### 查询API
+
 ```sh
 # Faiss search for ids 1, 2, and 3
 curl 'localhost:5000/faiss/search' -X POST -d '{"k": 5, "ids": [1, 2, 3]}'
