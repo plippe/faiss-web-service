@@ -11,9 +11,24 @@
 
 ### 2. 索引构建
 
-简单的构建，代码位置为：`src/train_index/train_index.py`。
+#### 简单的构建
 
-因为SIFT默认输出维度为128维，如果觉得太低，可以使用词袋模型（BOW），代码实现位置在：`src/train_index/train_index_bow.py`。
+代码位置为：`src/train_index/train_index.py`。
+这个代码里面使用的是不需要 `train` 的索引。
+
+#### 构建需要预训练的索引
+
+在真实使用场景下，我们会使用一些需要预训练的索引，比如"IVFx,Flat"等，关于如何选择合适的索引，请参考[这里](https://waltyou.github.io/Faiss-Indexs/#%E6%8C%91%E4%B8%80%E4%B8%AA%E5%90%88%E9%80%82%E7%9A%84-index)。
+代码位置为：`src/train_index/train_index_with_pre_train.py`。
+
+#### 词袋模型
+
+因为SIFT默认输出维度为128维，如果觉得太低，可以使用词袋模型（BOW）。
+代码实现位置在：`src/train_index/train_index_bow.py`。
+
+#### 基于Javacv提取出的特征构建索引
+
+代码实现位置在：`src/train_index/train_index_from_java.py`。
 
 ## 开始
 
