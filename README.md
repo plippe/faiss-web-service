@@ -5,6 +5,8 @@
 本项目 forked from [plippe/faiss-web-service](https://github.com/plippe/faiss-web-service)。
 添加了提取图片特征向量、构建 Faiss 索引以及构建运行docker三部分。
 
+关于 Faiss 以及其他此项目的详细信息，可以在我的blog上找到，地址在[这里](https://waltyou.github.io/Faiss-In-Project/)。
+
 ### 1. 图片特征提取
 
 使用opencv 的SIFT 特征提取算法，代码位置：`src/utils/feature_detect.py`
