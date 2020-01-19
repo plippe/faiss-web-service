@@ -3,11 +3,21 @@ import numpy as np
 
 class FaissIndex(object):
 
-    def __init__(self, index, id_to_vector):
-        assert index
-        assert id_to_vector
+    def __init__(self, index_path, ids_vectors_path):
+        assert(index_path)
+        assert(ids_vectors_path)
 
-        self.index = index
+        import pickle
+        with open(ids_vectors_path, 'rb') as f:
+            ids_vectors = pickle.load(f)
+
+        def id_to_vector(id_):
+            try:
+                return ids_vectors[id_]
+            except:
+                pass
+
+        self.index = faiss.read_index(index_path)
         self.id_to_vector = id_to_vector
 
     def search_by_ids(self, ids, k):
