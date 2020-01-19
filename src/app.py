@@ -4,8 +4,8 @@ from internal.blueprint import blueprint as InternalBlueprint
 from faiss_index.blueprint import blueprint as FaissIndexBlueprint
 
 app = Flask(__name__)
-app.config.from_object('config')
-app.config.from_envvar('FAISS_WEB_SERVICE_CONFIG')
+app.config['INDEX_PATH'] = '/opt/faiss-web-service/resources/index'
+app.config['IDS_VECTORS_PATH'] = '/opt/faiss-web-service/resources/ids_vectors.p'
 
 app.register_blueprint(InternalBlueprint)
 app.register_blueprint(FaissIndexBlueprint)
