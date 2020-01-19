@@ -3,7 +3,7 @@
 ### Getting started
 The fastest way to get started is to use [the docker hub image](https://hub.docker.com/r/plippe/faiss-web-service/) with the following command:
 ```sh
-docker run --rm -it -p 5000:5000 plippe/faiss-web-service:[FAISS_TAG]
+docker run --rm -it -p 5000:5000 plippe/faiss-web-service:[FAISS_RELEASE]
 ```
 
 Once the container is running, you should be able to ping the service:
@@ -27,7 +27,7 @@ docker run \
     -it \
     -p 5000:5000 \
     -v [PATH_TO_RESOURCES]:/opt/faiss-web-service/resources \
-    plippe/faiss-web-service:[FAISS_TAG]
+    plippe/faiss-web-service:[FAISS_RELEASE]
 ```
 
 Another solution would be to create a new docker image [from `plippe/faiss-web-service`](https://docs.docker.com/engine/reference/builder/#from), that [adds your resources](https://docs.docker.com/engine/reference/builder/#add).

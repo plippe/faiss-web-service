@@ -1,4 +1,4 @@
-.PHONY: build release run
+.PHONY: build release run test
 .DEFAULT_GOAL := build
 
 # https://github.com/facebookresearch/faiss/tags
