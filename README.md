@@ -1,7 +1,5 @@
 # Faiss Web Service
 
-[![Build Status](https://app.wercker.com/status/853a8945150f857d0c394e34884d33e0/s/master)](https://app.wercker.com/project/byKey/853a8945150f857d0c394e34884d33e0)
-
 ### Getting started
 The fastest way to get started is to use [the docker hub image](https://hub.docker.com/r/plippe/faiss-web-service/) with the following command:
 ```sh
