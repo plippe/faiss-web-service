@@ -1,3 +1,0 @@
-Flask==0.12.2
-uwsgi==2.0.16
-jsonschema==2.6.0

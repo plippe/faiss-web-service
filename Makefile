@@ -1,39 +1,27 @@
-.PHONY: build run test release
+.PHONY: build release run
 .DEFAULT_GOAL := build
 
-DOCKER_IMAGE := plippe/faiss-web-service
-FAISS_VERSION := $(shell curl -s https://api.github.com/repos/facebookresearch/faiss/releases/latest | jq -r .tag_name | cut -c2-)
+# https://github.com/facebookresearch/faiss/tags
+FAISS_RELEASE := 1.5.2
 
 build:
 	docker build \
-		--build-arg IMAGE=plippe/faiss-docker:1.2.1-cpu \
-		--tag $(DOCKER_IMAGE):$(FAISS_VERSION)-cpu \
-		--tag $(DOCKER_IMAGE):latest .
-
-	docker build \
-		--build-arg IMAGE=plippe/faiss-docker:1.2.1-gpu \
-		--tag $(DOCKER_IMAGE):$(FAISS_VERSION)-gpu .
-
-run: run-development
-run-%:
-	docker run \
-		--rm \
-		--tty \
-		--interactive \
-		--volume $(PWD):/opt/faiss-web-service \
-		--publish 5000:5000 \
-		$(DOCKER_IMAGE) $*
-
-test:
-	docker run \
-		--rm \
-		--tty \
-		--interactive \
-		--volume $(PWD):/opt/faiss-web-service \
-		--entrypoint bash \
-		$(DOCKER_IMAGE) -c "python -m unittest discover"
+		--build-arg FAISS_RELEASE=$(FAISS_RELEASE) \
+		--tag plippe/faiss-web-service:$(FAISS_RELEASE) \
+		.
 
 release:
-	docker push $(DOCKER_IMAGE)
-	docker push $(DOCKER_IMAGE):$(FAISS_VERSION)-cpu
-	docker push $(DOCKER_IMAGE):$(FAISS_VERSION)-gpu
+	docker push plippe/faiss-web-service:$(FAISS_RELEASE)
+
+run:
+	docker run \
+		--rm \
+		--interactive \
+		--tty \
+		--publish 5000:5000 \
+		plippe/faiss-web-service:$(FAISS_RELEASE)
+
+test:
+	curl localhost:5000/ping
+	curl localhost:5000/faiss/search -d '{"k": 5, "ids": [1, 2, 3]}'
+	curl localhost:5000/faiss/search -d '{"k": 5, "vectors": [[54.7, 0.3, 0.6, 0.4, 0.1, 0.7, 0.2, 0.0, 0.6, 0.5, 0.3, 0.2, 0.1, 0.9, 0.3, 0.6, 0.2, 0.9, 0.5, 0.0, 0.9, 0.1, 0.9, 0.1, 0.5, 0.5, 0.8, 0.8, 0.5, 0.2, 0.6, 0.2, 0.2, 0.7, 0.1, 0.7, 0.8, 0.2, 0.9, 0.0, 0.4, 0.4, 0.9, 0.0, 0.6, 0.4, 0.4, 0.6, 0.6, 0.2, 0.5, 0.0, 0.1, 0.6, 0.0, 0.0, 0.4, 0.7, 0.5, 0.7, 0.2, 0.5, 0.5, 0.7]]}'
