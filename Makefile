@@ -7,11 +7,11 @@ FAISS_RELEASE := 1.5.2
 build:
 	docker build \
 		--build-arg FAISS_RELEASE=$(FAISS_RELEASE) \
-		--tag plippe/faiss-web-service:$(FAISS_RELEASE) \
+		--tag 123wowow123/faiss-web-service:$(FAISS_RELEASE) \
 		.
 
 release:
-	docker push plippe/faiss-web-service:$(FAISS_RELEASE)
+	docker push 123wowow123/faiss-web-service:$(FAISS_RELEASE)
 
 run:
 	docker run \
@@ -19,7 +19,7 @@ run:
 		--interactive \
 		--tty \
 		--publish 5000:5000 \
-		plippe/faiss-web-service:$(FAISS_RELEASE)
+		123wowow123/faiss-web-service:$(FAISS_RELEASE)
 
 test:
 	curl localhost:5000/ping
