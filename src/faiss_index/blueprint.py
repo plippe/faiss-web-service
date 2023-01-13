@@ -1,7 +1,7 @@
 from jsonschema import validate, ValidationError
 from flask import Blueprint, jsonify, request
 from werkzeug.exceptions import BadRequest
-from faiss_index import FaissIndex
+from faiss_index.faiss_index import FaissIndex
 
 blueprint = Blueprint('faiss_index', __name__)
 

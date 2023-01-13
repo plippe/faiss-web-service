@@ -3,7 +3,7 @@
 ### Getting started
 The fastest way to get started is to use [the docker hub image](https://hub.docker.com/r/plippe/faiss-web-service/) with the following command:
 ```sh
-docker run --rm -it -p 9001:5000 plippe/faiss-web-service:[FAISS_RELEASE]
+docker run --rm -it -p 9001:5000 123wowow123/faiss-web-service:[FAISS_RELEASE]
 ```
 
 Once the container is running, you should be able to ping the service:
@@ -25,7 +25,7 @@ By default, the faiss web service will use the files in the `resources` folder. 
 docker run \
     --rm \
     -it \
-    -p 5000:9001 \
+    -p 9001:5000 \
     -v [PATH_TO_RESOURCES]:/opt/faiss-web-service/resources \
     plippe/faiss-web-service:[FAISS_RELEASE]
 ```
@@ -42,17 +42,21 @@ The application runs with Flask's build in server. Flask's documentation clearly
 
 https://realpython.com/intro-to-pyenv/
 
+
 Make sure you are in 3.x version
 `python -V`
 
 Check version installed on your system
 `pyenv versions`
 
+Intall pyenv
+`brew install pyenv`
+
 Install python 3
 `pyenv install -v 3`
 
 Use python 3
-`pyenv global 3.actual version`
+`pyenv global 3.<actual version>`
 
 Check pip is at the same version
 `pyenv which pip`

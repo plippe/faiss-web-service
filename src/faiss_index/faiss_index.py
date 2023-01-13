@@ -9,7 +9,7 @@ class FaissIndex(object):
 
         import pickle
         with open(ids_vectors_path, 'rb') as f:
-            ids_vectors = pickle.load(f)
+            ids_vectors = pickle.load(f, encoding='latin1')
 
         def id_to_vector(id_):
             try:
@@ -34,7 +34,7 @@ class FaissIndex(object):
 
     def __search__(self, ids, vectors, k):
         def neighbor_dict(id_, score):
-            return { 'id': long(id_), 'score': float(score) }
+            return { 'id': int(id_), 'score': float(score) }
 
         def result_dict(id_, vector, neighbors):
             return { 'id': id_, 'vector': vector.tolist(), 'neighbors': neighbors }

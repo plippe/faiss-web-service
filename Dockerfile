@@ -1,11 +1,6 @@
-ARG FAISS_RELEASE
-FROM plippe/faiss-docker:${FAISS_RELEASE}
+FROM continuumio/anaconda3
 
-RUN cd /opt/faiss/python && \
-  make install && \
-  yum install -y epel-release && \
-  yum install -y python-pip && \
-  pip install Flask==1.1.1 jsonschema==3.2.0
+RUN conda install -c pytorch faiss-cpu
 
 COPY resources /opt/faiss-web-service/resources
 COPY src /opt/faiss-web-service/src
