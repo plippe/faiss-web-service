@@ -11,8 +11,14 @@ Once the container is running, you should be able to ping the service:
 # Healthcheck
 curl 'localhost:9001/ping'
 
-# Faiss search for ids 1, 2, and 3
+# Faiss search
 curl 'localhost:9001/faiss/search' -d "q=apple products"
+
+# Faiss add
+curl 'localhost:9001/faiss/search?q=apple products'
+
+# Faiss remove
+curl 'localhost:9001/faiss/search?q=apple products'
 
 
 ### Custom index

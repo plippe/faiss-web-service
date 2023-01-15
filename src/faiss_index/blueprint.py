@@ -1,5 +1,6 @@
 from jsonschema import validate, ValidationError
 from flask import Blueprint, jsonify, request
+from sqlalchemy import true
 from werkzeug.exceptions import BadRequest
 from faiss_index.faiss_index import FaissIndex
 
@@ -20,7 +21,47 @@ def search():
     try:
         q = request.args.get('q')
         D, I = blueprint.faiss_index.search_by_sentence(q)
-        return jsonify({'d': D, 'i': I})
+        tupleList = list(zip(I[0], D[0]))
+        res = sorted(
+            [{"index": i, "match": d} for i, d in tupleList if i != -1],
+            key=lambda x: x["match"], reverse=True
+        )
+        return jsonify({'res': res})
+
+    except (BadRequest, ValidationError) as e:
+        print('Bad request', e)
+        return 'Bad request', 400
+
+    except Exception as e:
+        print('Server error', e)
+        return 'Server error', 500
+
+
+@blueprint.route('/faiss/add', methods=['POST'])
+def add():
+    try:
+        json = request.get_json(force=True)
+        id = json['id']
+        sentence = json['sentence']
+        res = blueprint.faiss_index.add_with_id(id, sentence)
+        return jsonify({'res': res})
+
+    except (BadRequest, ValidationError) as e:
+        print('Bad request', e)
+        return 'Bad request', 400
+
+    except Exception as e:
+        print('Server error', e)
+        return 'Server error', 500
+
+
+@blueprint.route('/faiss/remove', methods=['DELETE'])
+def remove():
+    try:
+        json = request.get_json(force=True)
+        id = json['id']
+        res = blueprint.faiss_index.remove(id)
+        return jsonify({'res': res})
 
     except (BadRequest, ValidationError) as e:
         print('Bad request', e)
