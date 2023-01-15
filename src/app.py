@@ -1,12 +1,17 @@
 from flask import Flask
+import os
 
 from internal.blueprint import blueprint as InternalBlueprint
 from faiss_index.blueprint import blueprint as FaissIndexBlueprint
 
 app = Flask(__name__)
+
+seedPath = '../scripts/seedPins.json'
+script_dir = os.path.dirname(__file__)
+abs_file_path = os.path.join(script_dir, seedPath)
 # app.config['INDEX_PATH'] = '/opt/faiss-web-service/resources/index'
 # app.config['IDS_VECTORS_PATH'] = '/opt/faiss-web-service/resources/ids_vectors.p'
-app.config['PINS_JSON_PATH'] = '../scripts/seedPins.json' # '../../chronopin/scripts/backup/seedPins.json'
+app.config['PINS_JSON_PATH'] = abs_file_path # '../../chronopin/scripts/backup/seedPins.json'
 
 app.register_blueprint(InternalBlueprint)
 app.register_blueprint(FaissIndexBlueprint)

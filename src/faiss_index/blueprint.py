@@ -29,39 +29,3 @@ def search():
     except Exception as e:
         print('Server error', e)
         return 'Server error', 500
-
-
-@blueprint.route('/faiss/vector/search', methods=['POST'])
-def search():
-    try:
-        json = request.get_json(force=True)
-        validate(json, {
-            'type': 'object',
-            'required': ['k'],
-            'properties': {
-                'k': {'type': 'integer', 'minimum': 1},
-                'ids': {'type': 'array', 'items': {'type': 'number'}},
-                'vectors': {
-                    'type': 'array',
-                    'items': {
-                        'type': 'array',
-                        'items': {'type': 'number'}
-                    }
-                }
-            }
-        })
-
-        results_ids = blueprint.faiss_index.search_by_ids(
-            json['ids'], json['k']) if 'ids' in json else []
-        results_vectors = blueprint.faiss_index.search_by_vectors(
-            json['vectors'], json['k']) if 'vectors' in json else []
-
-        return jsonify(results_ids + results_vectors)
-
-    except (BadRequest, ValidationError) as e:
-        print('Bad request', e)
-        return 'Bad request', 400
-
-    except Exception as e:
-        print('Server error', e)
-        return 'Server error', 500

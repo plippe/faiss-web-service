@@ -12,11 +12,8 @@ Once the container is running, you should be able to ping the service:
 curl 'localhost:9001/ping'
 
 # Faiss search for ids 1, 2, and 3
-curl 'localhost:9001/faiss/search' -X POST -d '{"k": 5, "ids": [1, 2, 3]}'
+curl 'localhost:9001/faiss/search?q=apple products'
 
-# Faiss search for a vector
-curl 'localhost:9001/faiss/search' -X POST -d '{"k": 5, "vectors": [[54.7, 0.3, 0.6, 0.4, 0.1, 0.7, 0.2, 0.0, 0.6, 0.5, 0.3, 0.2, 0.1, 0.9, 0.3, 0.6, 0.2, 0.9, 0.5, 0.0, 0.9, 0.1, 0.9, 0.1, 0.5, 0.5, 0.8, 0.8, 0.5, 0.2, 0.6, 0.2, 0.2, 0.7, 0.1, 0.7, 0.8, 0.2, 0.9, 0.0, 0.4, 0.4, 0.9, 0.0, 0.6, 0.4, 0.4, 0.6, 0.6, 0.2, 0.5, 0.0, 0.1, 0.6, 0.0, 0.0, 0.4, 0.7, 0.5, 0.7, 0.2, 0.5, 0.5, 0.7]]}'
-```
 
 ### Custom index
 By default, the faiss web service will use the files in the `resources` folder. Those can be overwritten by mounting new ones.

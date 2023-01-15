@@ -1,9 +1,10 @@
 import faiss
+import json
 import numpy as np
 import pandas as pd
 from sentence_transformers import SentenceTransformer
 
-class FaissIndex(object):
+class FaissIndex:
 
     # def __init__(self, index_path, ids_vectors_path):
     #     assert(index_path)
@@ -23,19 +24,22 @@ class FaissIndex(object):
     #     self.id_to_vector = id_to_vector
 
     def __init__(self, json_path):
-        # self.index = faiss.read_index(json_path) ##
-        # self.id_to_vector = id_to_vector
         self.model = SentenceTransformer('bert-base-nli-mean-tokens')
         
-        df = pd.read_json(json_path)
+        with open(json_path, encoding='utf-8-sig') as fp:
+            data = json.loads(''.join(line.strip() for line in fp))
+
+        df = pd.json_normalize(data)
+
+        # df = pd.read_json(json_path)
         df['searchColumn'] = df['title'] + " " + df['description']
         sentences = df['searchColumn'].tolist()
 
         sentence_embeddings = self.get_embeddings(sentences)
 
         d = sentence_embeddings.shape[1] # 768
-        nlist = 100
-        bits = 8 # number of bits in each centroid
+        nlist = 8 # need to add more later
+        bits = 4 # number of bits in each centroid
         m = 8 # number of centroid IDs in final compressed vectors
         quantizer = faiss.IndexFlatL2(d)  # this remains the same
         self.index = faiss.IndexIVFPQ(quantizer, d, nlist, m, bits)
@@ -43,9 +47,19 @@ class FaissIndex(object):
         self.index.train(sentence_embeddings)
         self.index.add(sentence_embeddings)
 
+        ntotal = self.index.ntotal
+
         D, I = self.search_by_sentence("war in ukrain") # sanity check
         print(I)
         print(D)
+
+        tupleList = list(zip(I[0], D[0]))
+        results = sorted(
+            [{"index": i, "match": d, "text": f'{sentences[i]}'} for i, d in tupleList if i != -1],
+            key=lambda x: x["match"], reverse=True
+        )
+        print(results)
+        
 
     def get_embedding(self, sentence):
         sentence_embedding = self.model.encode(sentence)
@@ -57,7 +71,8 @@ class FaissIndex(object):
 
 
     def search_by_sentence(self, sentence, k = 4):
-        return self.index.search(sentence, k)
+        embedding = self.get_embedding([sentence])
+        return self.index.search(embedding, k)
 
     def search_by_ids(self, ids, k):
         vectors = [self.id_to_vector(id_) for id_ in ids]
