@@ -6,23 +6,6 @@ from sentence_transformers import SentenceTransformer
 
 class FaissIndex:
 
-    # def __init__(self, index_path, ids_vectors_path):
-    #     assert(index_path)
-    #     assert(ids_vectors_path)
-
-    #     import pickle
-    #     with open(ids_vectors_path, 'rb') as f:
-    #         ids_vectors = pickle.load(f, encoding='latin1')
-
-    #     def id_to_vector(id_):
-    #         try:
-    #             return ids_vectors[id_]
-    #         except:
-    #             pass
-
-    #     self.index = faiss.read_index(index_path)
-    #     self.id_to_vector = id_to_vector
-
     def __init__(self, json_path):
         self.model = SentenceTransformer('bert-base-nli-mean-tokens')
         
@@ -73,4 +56,5 @@ class FaissIndex:
     def __get_embeddings__(self, sentences):
         sentence_embeddings = self.model.encode(sentences)
         return sentence_embeddings
+        
     # def __json_batch_add__():
