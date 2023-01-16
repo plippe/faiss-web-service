@@ -15,10 +15,10 @@ curl 'localhost:9001/ping'
 curl 'localhost:9001/faiss/search' -d "q=apple products"
 
 # Faiss add
-curl 'localhost:9001/faiss/search?q=apple products'
+curl 'localhost:9001/faiss/search' -X POST -d '{"id": 9999, "sentence": "war in ukrain"}'
 
 # Faiss remove
-curl 'localhost:9001/faiss/search?q=apple products'
+curl 'localhost:9001/faiss/search'  -X DELETE -d '{"id": 9999}'
 
 
 ### Custom index
