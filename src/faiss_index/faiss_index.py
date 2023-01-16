@@ -55,7 +55,7 @@ class FaissIndex:
         tupleList = list(zip(I[0], D[0]))
         results = sorted(
             [{"index": i, "match": d, "text": f'{df.loc[df["id"] == i]["searchColumn"]}'} for i, d in tupleList if i != -1],
-            key=lambda x: x["match"], reverse=True
+            key=lambda x: x["match"]
         )
         print(results)
         
@@ -65,10 +65,10 @@ class FaissIndex:
 
     def add_with_id(self, id, sentence):
         sentence_embeddings = self.__get_embeddings__([sentence])
-        self.index.add_with_ids(sentence_embeddings, [id])
+        return self.index.add_with_ids(sentence_embeddings, [id])
 
     def remove_by_id(self, id):
-        self.index.remove_ids([id])
+        return self.index.remove_ids(np.array([id]))
 
     def __get_embeddings__(self, sentences):
         sentence_embeddings = self.model.encode(sentences)

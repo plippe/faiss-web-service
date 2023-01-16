@@ -23,8 +23,8 @@ def search():
         D, I = blueprint.faiss_index.search_by_sentence(q)
         tupleList = list(zip(I[0], D[0]))
         res = sorted(
-            [{"index": i, "match": d} for i, d in tupleList if i != -1],
-            key=lambda x: x["match"], reverse=True
+            [{"index": int(i), "match": float(d)} for i, d in tupleList if i != -1],
+            key=lambda x: x["match"]
         )
         return jsonify({'res': res})
 
@@ -44,7 +44,7 @@ def add():
         id = json['id']
         sentence = json['sentence']
         res = blueprint.faiss_index.add_with_id(id, sentence)
-        return jsonify({'res': res})
+        return jsonify({'res': "success"})
 
     except (BadRequest, ValidationError) as e:
         print('Bad request', e)
@@ -60,8 +60,8 @@ def remove():
     try:
         json = request.get_json(force=True)
         id = json['id']
-        res = blueprint.faiss_index.remove(id)
-        return jsonify({'res': res})
+        res = blueprint.faiss_index.remove_by_id(id)
+        return jsonify({'res': "success"})
 
     except (BadRequest, ValidationError) as e:
         print('Bad request', e)

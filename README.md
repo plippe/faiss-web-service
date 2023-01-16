@@ -9,16 +9,16 @@ docker run --rm -it -p 9001:5000 123wowow123/faiss-web-service:[FAISS_RELEASE]
 Once the container is running, you should be able to ping the service:
 ```sh
 # Healthcheck
-curl 'localhost:9001/ping'
+curl 'localhost:5000/ping'
 
 # Faiss search
-curl 'localhost:9001/faiss/search' -d "q=apple products"
+curl 'localhost:5000/faiss/search?q=war'
 
 # Faiss add
-curl 'localhost:9001/faiss/search' -X POST -d '{"id": 9999, "sentence": "war in ukrain"}'
+curl 'localhost:5000/faiss/add' -X POST -d '{"id": 9999, "sentence": "war in ukrain"}'
 
 # Faiss remove
-curl 'localhost:9001/faiss/search'  -X DELETE -d '{"id": 9999}'
+curl 'localhost:5000/faiss/remove'  -X DELETE -d '{"id": 9999}'
 
 
 ### Custom index
