@@ -40,7 +40,7 @@ Another solution would be to create a new docker image [from `plippe/faiss-web-s
 The application runs with Flask's build in server. Flask's documentation clearly states [it is not suitable for production](http://flask.pocoo.org/docs/1.1.x/deploying/).
 
 
-####
+#### Docker Commands
 Build docker image
 `make`
 
